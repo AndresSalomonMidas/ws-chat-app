@@ -1,16 +1,27 @@
 import { Navigate } from "react-router-dom";
+import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ChatPage from "../pages/ChatPage";
 
 const getRoutes = () => [
   {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "",
+        element: <Navigate to="login" />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+    ],
   },
   {
     path: "/chat",
@@ -18,7 +29,7 @@ const getRoutes = () => [
   },
   {
     path: "*",
-    element: <Navigate to="/login" />,
+    element: <Navigate to="/auth/login" />,
   },
 ];
 
