@@ -4,10 +4,10 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ChatPage from "../pages/ChatPage";
 
-const getRoutes = () => [
+const getRoutes = (isAuth) => [
   {
     path: "/auth",
-    element: <AuthLayout />,
+    element: isAuth ? <Navigate to="/chat" /> : <AuthLayout />,
     children: [
       {
         path: "",
@@ -25,7 +25,7 @@ const getRoutes = () => [
   },
   {
     path: "/chat",
-    element: <ChatPage />,
+    element: isAuth ? <ChatPage /> : <Navigate to="/auth/login" />,
   },
   {
     path: "*",

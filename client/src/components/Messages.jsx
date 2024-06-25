@@ -8,9 +8,13 @@ const Messages = () => {
   return (
     <div className="mesgs">
       <div className="msg_history">
-        {messages.map((message) => (
-          message % 2 === 0 ? <SentMessage key={message} /> : <ReceivedMessage key={message} />
-        ))}
+        {messages.map((message) =>
+          message % 2 === 0 ? (
+            <SentMessage key={message} />
+          ) : (
+            <ReceivedMessage key={message} />
+          ),
+        )}
       </div>
 
       <SendMessageForm />

@@ -1,8 +1,79 @@
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
+  const { login, verifyToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    email: "hello@mail.com",
+    password: "12345",
+    rememberMe: false,
+  });
+
+  const verifyTokenAndRedirect = async () => {
+    const ok = await verifyToken();
+    if (ok) {
+      navigate("/chat", { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    // Get email from localStorage on load
+    const email = localStorage.getItem("email");
+    if (email) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        email: JSON.parse(email),
+        rememberMe: true,
+      }));
+    }
+
+    verifyTokenAndRedirect();
+  }, []);
+
+  const onChange = (e) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onChangeCheckbox = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      rememberMe: !prevForm.rememberMe,
+    }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    // Save email in localStorage
+    if (form.rememberMe) {
+      localStorage.setItem("email", JSON.stringify(form.email));
+    } else {
+      localStorage.removeItem("email");
+    }
+
+    const ok = await login(form.email, form.password);
+
+    if (!ok) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Incorrect email o password",
+      });
+    }
+  };
+
   return (
-    <form className="login100-form validate-form flex-sb flex-w">
+    <form
+      onSubmit={onSubmit}
+      className="login100-form validate-form flex-sb flex-w"
+    >
       <span className="login100-form-title mb-3">Chat - Ingreso</span>
 
       <div className="wrap-input100 validate-input mb-3">
@@ -11,6 +82,8 @@ const LoginPage = () => {
           type="email"
           name="email"
           placeholder="Email"
+          value={form.email}
+          onChange={onChange}
         />
         <span className="focus-input100"></span>
       </div>
@@ -21,6 +94,8 @@ const LoginPage = () => {
           type="password"
           name="password"
           placeholder="Password"
+          value={form.password}
+          onChange={onChange}
         />
         <span className="focus-input100"></span>
       </div>
@@ -31,7 +106,8 @@ const LoginPage = () => {
             className="input-checkbox100"
             id="ckb1"
             type="checkbox"
-            name="remember-me"
+            name="rememberMe"
+            onChange={onChangeCheckbox}
           />
           <label className="label-checkbox100" htmlFor="ckb1">
             Recordarme
@@ -46,7 +122,12 @@ const LoginPage = () => {
       </div>
 
       <div className="container-login100-form-btn m-t-17">
-        <button className="login100-form-btn">Ingresar</button>
+        <button
+          className="login100-form-btn"
+          disabled={!form.email || !form.password}
+        >
+          Ingresar
+        </button>
       </div>
     </form>
   );

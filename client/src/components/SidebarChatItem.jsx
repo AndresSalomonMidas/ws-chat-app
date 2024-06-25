@@ -6,7 +6,7 @@ const SidebarChatItem = () => {
         <div className="chat_img">
           <img
             src="https://ptetutorials.com/images/user-profile.png"
-            alt="sunil"
+            alt="avatar"
           />
         </div>
         <div className="chat_ib">
