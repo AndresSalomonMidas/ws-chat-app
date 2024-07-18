@@ -1,12 +1,15 @@
 import { RouterProvider } from "react-router-dom";
 import getRouter from "./router/router";
 import { SocketProvider } from "./context/SocketContext";
+import { ChatProvider } from "./context/chat/ChatContext";
 
 function App() {
   return (
-    <SocketProvider>
-      <RouterProvider router={getRouter()} />
-    </SocketProvider>
+    <ChatProvider>
+      <SocketProvider>
+        <RouterProvider router={getRouter()} />
+      </SocketProvider>
+    </ChatProvider>
   );
 }
 

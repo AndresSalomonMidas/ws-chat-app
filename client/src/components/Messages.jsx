@@ -1,18 +1,22 @@
+import { useContext } from "react";
 import ReceivedMessage from "./ReceivedMessage";
 import SendMessageForm from "./SendMessageForm";
 import SentMessage from "./SentMessage";
+import { ChatContext } from "../context/chat/ChatContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Messages = () => {
-  const messages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const { state } = useContext(ChatContext);
+  const { auth } = useContext(AuthContext);
 
   return (
     <div className="mesgs">
-      <div className="msg_history">
-        {messages.map((message) =>
-          message % 2 === 0 ? (
-            <SentMessage key={message} />
+      <div className="msg_history" id="msg_history">
+        {state.messages.map((message) =>
+          message.to === auth.uid ? (
+            <SentMessage key={message._id} message={message} />
           ) : (
-            <ReceivedMessage key={message} />
+            <ReceivedMessage key={message._id} message={message} />
           ),
         )}
       </div>

@@ -26,10 +26,6 @@ export const useSocket = (serverPath) => {
 
   useEffect(() => {
     setOnline(socket?.connected);
-  }, [socket]);
-
-  useEffect(() => {
-    setOnline(socket?.connected);
 
     socket?.on("connect", () => {
       setOnline(true);

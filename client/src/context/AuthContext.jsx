@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   uid: null,
   name: null,
   email: null,
-  checking: false,
+  checking: true,
   logged: false,
 };
 

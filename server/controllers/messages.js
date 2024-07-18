@@ -12,7 +12,7 @@ const getMessages = async (req, res = response) => {
       { from: from, to: myId },
     ],
   })
-    .sort({ createdAt: "desc" })
+    .sort({ createdAt: "asc" })
     .limit(30);
 
   res.json({
